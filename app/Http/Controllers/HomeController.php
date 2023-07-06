@@ -8,7 +8,7 @@ class HomeController extends Controller
 {
     public function __invoke()
     {
-        $categories = Category::tree()->get();
+        $categories = Category::tree()->get()->toTree();
 
         return view('home', get_defined_vars());
     }
