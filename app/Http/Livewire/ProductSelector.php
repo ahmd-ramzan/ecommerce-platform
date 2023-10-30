@@ -33,7 +33,7 @@ class ProductSelector extends Component
 
     public function addToCart()
     {
-        
+
     }
 
     public function render()
