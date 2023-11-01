@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,7 +26,7 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaCollection('default')
             ->useFallbackUrl(url('/storage/no-image.png'));
-}
+    }
 
     /**
      * @return Money
