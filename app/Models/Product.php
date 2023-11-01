@@ -21,6 +21,12 @@ class Product extends Model implements HasMedia
             ->nonQueued();
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useFallbackUrl(url('/storage/no-image.png'));
+}
+
     /**
      * @return Money
      */
