@@ -9,6 +9,8 @@ use Illuminate\Session\SessionManager;
 
 class Cart implements CartInterface
 {
+    protected $instance;
+
     public function __construct(protected SessionManager $session) {}
 
     public function exists()
@@ -27,5 +29,24 @@ class Cart implements CartInterface
         $instance->save();
 
         $this->session->put(config('cart.session.key'), $instance->uuid);
+    }
+
+    public function contents()
+    {
+        return $this->instance()->variations;
+    }
+
+    public function contentsCount()
+    {
+        return $this->contents()->count();
+    }
+
+    public function instance()
+    {
+        if ($this->instance) {
+            return $this->instance;
+        }
+
+        return $this->instance =  ModelsCart::query()->whereUuid($this->session->get(config('cart.session.key')))->first();
     }
 }
