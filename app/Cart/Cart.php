@@ -45,6 +45,13 @@ class Cart implements CartInterface
         ]);
     }
 
+    public function changeQuantity(Variation $variation, $quantity)
+    {
+        $this->instance()->variations()->updateExistingPivot($variation->id, [
+            'quantity' => min($quantity, $variation->stockCount())
+        ]);
+    }
+
     public function getVariation(Variation $variation)
     {
         return $this->instance()->variations->find($variation->id);
@@ -66,6 +73,10 @@ class Cart implements CartInterface
             return $this->instance;
         }
 
-        return $this->instance =  ModelsCart::query()->whereUuid($this->session->get(config('cart.session.key')))->first();
+        return $this->instance =  ModelsCart::query()
+            ->with('variations.product', 'variations.ancestorsAndSelf', 'variations.media', 'variations.descendantsAndSelf.stocks')
+            ->whereUuid($this->session->get(config('cart.session.key')))
+            ->first();
+        /* to start 27*/
     }
 }
