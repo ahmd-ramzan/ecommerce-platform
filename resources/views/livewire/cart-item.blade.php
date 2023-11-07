@@ -32,7 +32,7 @@
                 </select>
             </div>
 
-            <button class="text-sm">
+            <button type="button" class="text-sm" wire:click="remove">
                 Remove
             </button>
         </div>

@@ -52,6 +52,11 @@ class Cart implements CartInterface
         ]);
     }
 
+    public function remove(Variation $variation)
+    {
+        $this->instance()->variations()->detach($variation);
+    }
+
     public function getVariation(Variation $variation)
     {
         return $this->instance()->variations->find($variation->id);
@@ -65,6 +70,11 @@ class Cart implements CartInterface
     public function contentsCount()
     {
         return $this->contents()->count();
+    }
+
+    public function isEmpty()
+    {
+        return $this->contents()->count() === 0;
     }
 
     public function instance()
