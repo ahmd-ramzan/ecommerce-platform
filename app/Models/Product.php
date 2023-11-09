@@ -64,7 +64,8 @@ class Product extends Model implements HasMedia
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'slug' => $this->slug
+            'slug' => $this->slug,
+            'category_ids' => $this->categories->pluck('id')->toArray()
         ];
     }
 }
