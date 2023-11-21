@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\LiveScope;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,6 +16,11 @@ use Spatie\Image\Manipulations;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia, Searchable;
+
+    public static function booted()
+    {
+        static::addGlobalScope(new LiveScope());
+    }
 
     public function registerMediaConversions(?Media $media = null): void
     {

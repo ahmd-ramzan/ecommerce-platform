@@ -15,10 +15,12 @@
 
             <div class="space-y-6">
                 <div class="space-y-1">
-                    <div class="font-semibold">Max price ({{ money($priceRange['max']) }})</div>
-                    <div class="flex items-center space-x-2">
-                        <input type="range" min="0" max="{{ $maxPrice }}" wire:model="priceRange.max">
-                    </div>
+                    @if($category->products->count())
+                        <div class="font-semibold">Max price ({{ money($priceRange['max']) }})</div>
+                        <div class="flex items-center space-x-2">
+                            <input type="range" min="0" max="{{ $maxPrice }}" wire:model="priceRange.max">
+                        </div>
+                    @endif
                 </div>
                 <div class="space-y-1">
                     @if($products->count())
