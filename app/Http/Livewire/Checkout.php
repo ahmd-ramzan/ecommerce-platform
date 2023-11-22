@@ -19,9 +19,23 @@ class Checkout extends Component
         $this->shippingTypeId = $this->shippingTypes->first()->id;
     }
 
+    /**
+     * computed property
+     * @return mixed
+     */
     public function getShippingTypeProperty()
     {
         return $this->shippingTypes->find($this->shippingTypeId);
+    }
+
+    /**
+     * computed property
+     * @param CartInterface $cart
+     * @return mixed
+     */
+    public function getTotalProperty(CartInterface $cart)
+    {
+        return money($cart->subtotal() + $this->shippingType->price);
     }
 
     public function render(CartInterface $cart)
