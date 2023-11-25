@@ -127,6 +127,11 @@ class Cart implements CartInterface
         $this->instance = null;
     }
 
+    public function removeAll()
+    {
+        $this->instance()->variations()->detach();
+    }
+
     public function instance()
     {
         if ($this->instance) {
