@@ -1,53 +1,63 @@
-<form>
+<form wire:submit.prevent="checkout">
     <div class="overflow-hidden sm:rounded-lg grid grid-cols-6 grid-flow-col gap-4">
         <div class="p-6 bg-white border-b border-gray-200 col-span-3 self-start space-y-6">
-            <div class="space-y-3">
-                <div class="font-semibold text-lg">Account details</div>
+            @guest()
+                <div class="space-y-3">
+                    <div class="font-semibold text-lg">Account details</div>
 
-                <div>
-                    <label for="email">Email</label>
-                    <x-text-input id="email" class="block mt-1 w-full" type="text" name="email"/>
-
-                    <div class="mt-2 font-semibold text-red-500">
-                        An error
+                    <div>
+                        <label for="email">Email</label>
+                        <x-text-input id="email" class="block mt-1 w-full" type="text" name="email" wire:model.defer="accountForm.email"/>
+                        @error('accountForm.email')
+                            <div class="mt-2 font-semibold text-red-500">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                 </div>
-            </div>
+            @endguest
 
             <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
-                <x-select class="w-full">
-                    <option value="">Choose a pre-saved address</option>
-                    <option value="">Pre-saved address</option>
-                </x-select>
+                @if($this->userShippingAddresses)
+                    <x-select class="w-full" wire:model="userShippingAddressId">
+                        <option value="">Choose a pre-saved address</option>
+                        @foreach($this->userShippingAddresses as $address)
+                            <option value="{{ $address->id }}">{{ $address->formattedAddress() }}</option>
+                        @endforeach
+                    </x-select>
+                @endif
 
                 <div class="space-y-3">
                     <div>
                         <label for="address">Address</label>
-                        <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"/>
-
+                        <x-text-input id="address" class="block mt-1 w-full" type="text" wire:model.defer="shippingForm.address" />
+                        @error('shippingForm.address')
                         <div class="mt-2 font-semibold text-red-500">
-                            An error
+                            {{ $message }}
                         </div>
+                        @enderror
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
                             <label for="address">City</label>
-                            <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"/>
-
+                            <x-text-input id="address" class="block mt-1 w-full" type="text" wire:model.defer="shippingForm.city" />
+                            @error('shippingForm.city')
                             <div class="mt-2 font-semibold text-red-500">
-                                An error
+                                {{ $message }}
                             </div>
+                            @enderror
                         </div>
                         <div class="col-span-1">
                             <label for="address">Postal code</label>
-                            <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"/>
-
+                            <x-text-input id="address" class="block mt-1 w-full" type="text" wire:model.defer="shippingForm.postcode" />
+                            @error('shippingForm.postcode')
                             <div class="mt-2 font-semibold text-red-500">
-                                An error
+                                {{ $message }}
                             </div>
+                            @enderror
                         </div>
                     </div>
                 </div>
