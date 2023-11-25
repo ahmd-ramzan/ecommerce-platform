@@ -3,9 +3,11 @@
 namespace App\Cart;
 
 use App\Cart\Contracts\CartInterface;
+use App\Exceptions\QuantityNoLongerAvailableException;
 use App\Models\Cart as ModelsCart;
 use App\Models\User;
 use App\Models\Variation;
+use Exception;
 use Illuminate\Session\SessionManager;
 
 class Cart implements CartInterface
@@ -67,6 +69,36 @@ class Cart implements CartInterface
         return $this->instance()->variations;
     }
 
+    public function verifyAvailableQuantities()
+    {
+        $this->instance()->variations->each(function ($variation) {
+            if ($variation->pivot->quantity > $variation->stocks->sum('amount')) {
+                throw new QuantityNoLongerAvailableException('Stock Reduced');
+            }
+        });
+    }
+
+    public function syncAvailableQuantities()
+    {
+        $syncedQuantities = $this->instance()->variations->mapWithKeys(function ($variation) {
+           $quantity = $variation->pivot->quantity > $variation->stocks->sum('amount')
+               ? $variation->stockCount()
+               : $variation->pivot->quantity;
+
+           return [
+               $variation->id => [
+                   'quantity' => $quantity
+               ]
+           ];
+        })->reject(function ($syncedQuantities) {
+           return $syncedQuantities['quantity'] === 0;
+        })->toArray();
+
+        $this->instance()->variations()->sync($syncedQuantities);
+
+        $this->clearInstanceCache();
+    }
+
     public function contentsCount()
     {
         return $this->contents()->count();
@@ -88,6 +120,11 @@ class Cart implements CartInterface
     public function isEmpty()
     {
         return $this->contents()->count() === 0;
+    }
+
+    public function clearInstanceCache()
+    {
+        $this->instance = null;
     }
 
     public function instance()
