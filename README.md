@@ -7,6 +7,11 @@ Robust e-commerce platform with a Laravel and Livewire. Features products with u
 - **sudo apt update && sudo apt install meilisearch**
 - **php artisan scout:import "App\Models\Product"**
 
+## Mailhog for local email testing
+- **sudo apt-get -y install golang-go**
+- **go install github.com/mailhog/MailHog@latest"**
+- **~/go/bin/MailHog"**
+
 ## Run following commands in project root
 - **composer install**
 - **php artisan key:generate**
@@ -18,3 +23,7 @@ Robust e-commerce platform with a Laravel and Livewire. Features products with u
 SCOUT_DRIVER=meilisearch  
 MEILISEARCH_HOST=http://127.0.0.1:7700  
 MEILISEARCH_KEY=masterKey  
+
+MAIL_MAILER=smtp  
+MAIL_HOST=localhost  
+MAIL_FROM_ADDRESS="mail@example.com"  
