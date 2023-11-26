@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Presenters\OrderPresenter;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +55,11 @@ class Order extends Model
     {
         return collect($this->statuses)
             ->last(fn ($status) => filled($this->{$status}));
+    }
+
+    public function presenter()
+    {
+        return new OrderPresenter($this);
     }
 
     public function user()
