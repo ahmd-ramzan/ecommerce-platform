@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreignId('shipping_type_id')->nullable()->constrained();
             $table->integer('subtotal');
             $table->timestamp('placed_at');
-            $table->timestamp('packaged_at')->useCurrent();
-            $table->timestamp('shipped_at')->useCurrent();
+            $table->timestamp('packaged_at')->nullable();
+            $table->timestamp('shipped_at')->nullable();
             $table->timestamps();
         });
     }

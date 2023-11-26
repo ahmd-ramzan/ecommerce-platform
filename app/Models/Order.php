@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
@@ -18,13 +19,41 @@ class Order extends Model
         'shipped_at'
     ];
 
+    protected $casts = [
+        'placed_at' => 'datetime',
+        'packaged_at' => 'datetime',
+        'shipped_at' => 'datetime'
+    ];
+
+    protected $statuses = [
+        'placed_at',
+        'packaged_at',
+        'shipped_at'
+    ];
+
     protected static function booted()
     {
         static::creating(function (Order $order) {
             $order->placed_at = now();
+            $order->packaged_at = null;
+            $order->shipped_at = null;
 
             $order->uuid = (string) Str::uuid();
         });
+    }
+
+    /**
+     * @return Money
+     */
+    public function formattedSubtotal()
+    {
+        return money($this->subtotal);
+    }
+
+    public function status()
+    {
+        return collect($this->statuses)
+            ->last(fn ($status) => filled($this->{$status}));
     }
 
     public function user()

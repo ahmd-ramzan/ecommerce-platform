@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryShowController;
 use App\Http\Controllers\CheckoutIndexController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderConfirmationIndexController;
+use App\Http\Controllers\OrderIndexController;
 use App\Http\Controllers\ProductShowController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -32,9 +33,7 @@ Route::get('/products/{product:slug}', ProductShowController::class);
 
 Route::get('/orders/{order:uuid}/confirmation', OrderConfirmationIndexController::class)->name('orders.confirmation');
 
-Route::get('/orders', function () {
-    return 'orders';
-})->name('orders');
+Route::get('/orders', OrderIndexController::class)->name('orders');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
