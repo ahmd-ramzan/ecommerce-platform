@@ -11,6 +11,8 @@ class Cart extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected static function booted()
     {
         static::creating(function ($model) {
