@@ -64,6 +64,16 @@ class Checkout extends Component
         'accountForm.email.unique' => 'Seems you already have a account. Please sign in to place an order'
     ];
 
+    public function callValidate()
+    {
+        $this->validate();
+    }
+
+    public function getErrorCount()
+    {
+        return $this->getErrorBag()->count();
+    }
+
     /**
      * computed property
      * @return mixed
@@ -109,6 +119,14 @@ class Checkout extends Component
     public function checkout(CartInterface $cart)
     {
         $this->validate();
+
+        if (!$this->getPaymentIntent($cart)->status === 'succeeded') {
+            $this->dispatchBrowserEvent('notification', [
+                'body' => 'Your payment failed'
+            ]);
+
+            return;
+        }
 
         $this->shippingAddress = ShippingAddress::query();
 
